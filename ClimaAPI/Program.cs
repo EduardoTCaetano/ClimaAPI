@@ -11,18 +11,17 @@ internal class Program
 
     private static async Task Main(string[] args)
     {
-        string city;
-        do
+        while (true)
         {
             Console.WriteLine("Digite o nome da cidade desejada (ou 'sair' para encerrar):");
-            city = Console.ReadLine();
+            string city = Console.ReadLine();
 
-            if (!string.Equals(city, "sair", StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(city, "sair", StringComparison.OrdinalIgnoreCase))
             {
-                await GetWeatherData(city);
+                break;
             }
-
-        } while (!string.Equals(city, "sair", StringComparison.OrdinalIgnoreCase));
+            await GetWeatherData(city);
+        }
     }
 
     private static async Task GetWeatherData(string city)
@@ -33,11 +32,13 @@ internal class Program
         if (response.IsSuccessStatusCode)
         {
             var weatherData = JsonConvert.DeserializeObject<WeatherResponse>(responseBody);
+            Console.WriteLine("---------------------------------------");
             Console.WriteLine($"Cidade: {weatherData.Name}");
             Console.WriteLine($"Temperatura: {weatherData.Main.Temp}°C");
             Console.WriteLine($"Condição: {weatherData.Weather[0].Description}");
             Console.WriteLine($"Humidade: {weatherData.Main.Humidity}%");
             Console.WriteLine($"Vento: {weatherData.Wind.Speed} m/s");
+            Console.WriteLine("---------------------------------------");
         }
         else
         {
@@ -45,11 +46,3 @@ internal class Program
         }
     }
 }
-
-
-
-
-
-
-
-
